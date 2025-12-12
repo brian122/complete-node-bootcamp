@@ -1,11 +1,20 @@
+/////////////////////////////////////////////
 //Core Modules
+//https://nodejs.org/docs/latest/api/
+//https://stackoverflow.com/questions/35824135/exact-list-of-node-core-modules
+/////////////////////////////////////////////
 const fs = require('fs');
 const http = require('http')
 const url = require('url')
 
+/////////////////////////////////////////////
 //Our Modules
+//https://nodejs.org/api/modules.html
+//Our directory is named modules but lib(short for library) is a commom directory used
 //modules don't require .js
 //can name the varialbe whatever. We named it the same because we had already written it.
+//adding the ./ to the path tells Node not to look in the node_modules directory 
+/////////////////////////////////////////////
 const replaceTemplate = require('./starter/modules/replaceTemplate') 
 
 /////////////////////////////////////////////
