@@ -8,6 +8,14 @@ const http = require('http')
 const url = require('url')
 
 /////////////////////////////////////////////
+//3rd Party Modules
+//
+/////////////////////////////////////////////
+//slug is the last part of the URL that containts unique string that identifies a resource
+const slugify = require('slugify')  //https://www.npmjs.com/package/slugify
+
+
+/////////////////////////////////////////////
 //Our Modules
 //https://nodejs.org/api/modules.html
 //Our directory is named modules but lib(short for library) is a commom directory used
@@ -91,6 +99,10 @@ const data = fs.readFileSync(`${__dirname}/starter/dev-data/data.json`, 'utf8')
 //Convert the JSON string (data) into an array of Objects
 const dataObj = JSON.parse(data)
 //console.log(dataObj)
+
+const slugs = dataObj.map(el => slugify(el.productName, { lower:true}))
+console.log(slugs)
+//console.log(slugify('Fresh Avocados', { lower:true}))
 
 
 const server = http.createServer((req, res) => {
