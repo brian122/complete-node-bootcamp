@@ -1,0 +1,18 @@
+{
+  "name": "asynch-js",
+  "version": "1.0.0",
+  "description": "Learning asynch JS",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brian King",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  },
+  "dependencies": {
+    "superagent": "^10.2.3"
+  }
+}
