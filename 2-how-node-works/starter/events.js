@@ -54,7 +54,7 @@ const server = http.createServer()
 
 server.on('request', (req, res) =>{
     console.log('Request received!')
-    //shows why the requests are shown twice
+    //shows why the requests are shown twice. favicon
     console.log(req.url)
     res.end('Request received')
 })
