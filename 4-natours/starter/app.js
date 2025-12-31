@@ -18,6 +18,13 @@ const express = require('express')
 /////////////////////////////////////////////
 const app = express()
 
+/////////////////////////////////////////////
+/// Middleware
+/////////////////////////////////////////////
+//funtion that can modify the incoming request data. 
+//It stands between the req and res
+app.use(express.json())
+
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`))
 
 /////////////////////////////////////////////
@@ -47,6 +54,32 @@ app.get('/api/v1/tours', (req, res) => {
             tours
         }
     })
+})
+
+app.post('/api/v1/tours', (req, res) => {
+    //console.log(req.body)
+    //the DB normally creates a new ID
+    //we will just +1 the last object in the json file
+    const newId = tours[tours.length -1].id + 1
+    //Object.assign creates a new object by merging two objects
+    //could have req.body.id = newID but didn't want to mutate the original
+    const newTour = Object.assign({ id: newId }, req.body)
+    //push the new tour into the tours array
+    tours.push(newTour)
+    //persist the change to the file
+    //We use the writeFile not the writeFileSync so we don't block the event loop
+    //we have to stringify the tours object
+    fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), err => {
+        //status of 201 = created
+        res.status(201).json({
+            status: 'success',
+            data: {
+                tour: newTour
+            }
+        })
+    })
+    //since we are res with status we don't need this send
+    //res.send('Done')
 })
 /////////////////////////////////////////////
 /// Web Server
