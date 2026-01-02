@@ -73,9 +73,6 @@ app.get('/api/v1/tours/:id', (req, res) => {
             message: 'Invalid ID'
         })
     }
-
-    
-
     res.status(200).json({
         status: 'success',
         data: {
@@ -109,6 +106,24 @@ app.post('/api/v1/tours', (req, res) => {
     })
     //since we are res with status we don't need this send
     //res.send('Done')
+})
+
+
+app.patch('/api/v1/tours/:id', (req, res) => {
+    const id = Number(req.params.id)
+    if (id > tours.length) {
+        //console.log(Number(req.params.id))
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Invalid ID'
+        })
+    }
+    res.status(200).json({
+        status: 'success',
+        data: {
+            tour: '<Updated tour here...>'
+        }
+    })
 })
 /////////////////////////////////////////////
 /// Web Server
