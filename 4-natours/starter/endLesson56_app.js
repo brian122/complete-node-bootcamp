@@ -45,12 +45,7 @@ const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simpl
 //we want to send back all of the data for the tours. tours is the resource.
 //tours data comes from dev-data/tours-simple.json
 //in ES6 if the key and value have the same name you don't have to specify them. Can just write tours.
-//Lesson:67 separating the HTTP Method and URL from the Route Handler funtions
-
-/////////////////////////////////////////////
-/// Route Handler Functions
-/////////////////////////////////////////////
-const getAllTours = (req, res) => {
+app.get('/api/v1/tours', (req, res) => {
     res.status(200).json({
         status: 'success',
         results: tours.length,
@@ -59,13 +54,11 @@ const getAllTours = (req, res) => {
             tours
         }
     })
-}
-
+})
 
 //could have optional parameters using ?
 //app.get('/api/v1/tours/:id/:x?/:y?', (req, res)
-
-const getTour = (req, res) => {
+app.get('/api/v1/tours/:id', (req, res) => {
     console.log(req.params)
 
     const id = Number(req.params.id)
@@ -86,10 +79,10 @@ const getTour = (req, res) => {
             tour
         }
     })
-}
+})
 
 
-const createTour = (req, res) => {
+app.post('/api/v1/tours', (req, res) => {
     //console.log(req.body)
     //the DB normally creates a new ID
     //we will just +1 the last object in the json file
@@ -113,12 +106,10 @@ const createTour = (req, res) => {
     })
     //since we are res with status we don't need this send
     //res.send('Done')
-}
+})
 
 
-
-
-const updateTour = (req, res) => {
+app.patch('/api/v1/tours/:id', (req, res) => {
     const id = Number(req.params.id)
     if (id > tours.length) {
         //console.log(Number(req.params.id))
@@ -133,10 +124,9 @@ const updateTour = (req, res) => {
             tour: '<Updated tour here...>'
         }
     })
-}
+})
 
-
-const deleteTour = (req, res) => {
+app.delete('/api/v1/tours/:id', (req, res) => {
     const id = Number(req.params.id)
     if (id > tours.length) {
         //console.log(Number(req.params.id))
@@ -149,29 +139,7 @@ const deleteTour = (req, res) => {
         status: 'success',
         data: null
     })
-}
-
-/////////////////////////////////////////////
-/// Routing HTTP Methods and URLs
-/////////////////////////////////////////////
-
-// app.get('/api/v1/tours', getAllTours)
-// app.post('/api/v1/tours', createTour)
-// app.get('/api/v1/tours/:id', getTour)
-// app.patch('/api/v1/tours/:id', updateTour)
-// app.delete('/api/v1/tours/:id', deleteTour)
-
-app
-    .route('/api/v1/tours')
-    .get(getAllTours)
-    .post(createTour)
-
-app
-    .route('/api/v1/tours/:id')
-    .get(getTour)
-    .patch(updateTour)
-    .delete(deleteTour)
-
+})
 /////////////////////////////////////////////
 /// Web Server
 /////////////////////////////////////////////
@@ -179,4 +147,3 @@ const port = 3000
 app.listen(port, () => {
     console.log(`App running on port ${port}...`)
 })
-
