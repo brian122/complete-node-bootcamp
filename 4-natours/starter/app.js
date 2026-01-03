@@ -11,6 +11,7 @@ const fs = require('fs')
 //NPM Modules - 3rd Party
 /////////////////////////////////////////////
 const express = require('express')
+const morgan = require('morgan')
 
 
 /////////////////////////////////////////////
@@ -21,6 +22,7 @@ const app = express()
 /////////////////////////////////////////////
 /// Middleware
 /////////////////////////////////////////////
+app.use(morgan('dev'))
 //funtion that can modify the incoming request data. 
 //It stands between the req and res
 app.use(express.json())
