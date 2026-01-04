@@ -215,27 +215,44 @@ const deleteUser = (req, res) => {
 // app.patch('/api/v1/tours/:id', updateTour)
 // app.delete('/api/v1/tours/:id', deleteTour)
 
-app
-    .route('/api/v1/tours')
+const tourRouter = express.Router()
+//app
+tourRouter
+    // .route('/api/v1/tours')
+    .route('/')  //using the express Router set in Middleware
     .get(getAllTours)
     .post(createTour)
 
-app
-    .route('/api/v1/tours/:id')
+// app
+tourRouter
+    // .route('/api/v1/tours/:id')
+    .route('/:id') //using the express Router set in Middleware
     .get(getTour)
     .patch(updateTour)
     .delete(deleteTour)
 
-app 
-    .route('/api/v1/users')
+const userRouter = express.Router()
+// app 
+userRouter
+    // .route('/api/v1/users')
+    .route('/')  //using the express Router set in Middleware
     .get(getAllUsers)
     .post(createUser)
 
-app
-    .route('/api/v1/users/:id')
+// app
+userRouter
+    // .route('/api/v1/users/:id')
+    .route('/:id')  //using the express Router set in Middleware
     .get(getUser)
     .patch(updateUser)
     .delete(deleteUser)
+
+
+//set up the express middleware routers
+//creates a small sub-app to mount the router to the route
+//can't mount the routers before they are declared (e.g. const userRouter = express.Router())
+app.use('/api/v1/tours', tourRouter)
+app.use('/api/v1/users', userRouter)
 
 /////////////////////////////////////////////
 /// Web Server
