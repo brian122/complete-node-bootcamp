@@ -27,6 +27,9 @@ app.use(morgan('dev'))
 //funtion that can modify the incoming request data. 
 //It stands between the req and res
 app.use(express.json())
+//server static files from a folder instead of a route
+app.use(express.static(`${__dirname}/public`))
+
 
 //define our own middleware function
 //placement of the middleware in the code matters
