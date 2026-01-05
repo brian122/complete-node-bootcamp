@@ -23,7 +23,13 @@ const app = express()
 /////////////////////////////////////////////
 /// Middleware
 /////////////////////////////////////////////
-app.use(morgan('dev'))
+//we can use the NODE_ENV variable here because we used the dotenv.config in the server.js file
+//it is now available in all the files in the project
+if (process.env.NODE_ENV === 'development') {
+    //logger middleware
+    app.use(morgan('dev'))
+}
+
 //funtion that can modify the incoming request data. 
 //It stands between the req and res
 app.use(express.json())
