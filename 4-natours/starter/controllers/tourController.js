@@ -22,6 +22,18 @@ const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-si
 //in ES6 if the key and value have the same name you don't have to specify them. Can just write tours.
 //Lesson:67 separating the HTTP Method and URL from the Route Handler funtions
 
+//Param Middleware
+exports.checkID = (req, res, next, val) => {
+    console.log(`Tour id is: ${val}`)
+    if (req.param.id * 1 > tours.length) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Invalid ID'
+        })
+    }
+    next()
+}
+
 exports.getAllTours = (req, res) => {
     console.log(req.requestTime)
     res.status(200).json({
@@ -47,12 +59,12 @@ exports.getTour = (req, res) => {
     const tour = tours.find(el => el.id === id)
 
     // if (id > tours.length) {
-    if (!tour) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'Invalid ID'
-        })
-    }
+    // if (!tour) {
+    //     return res.status(404).json({
+    //         status: 'fail',
+    //         message: 'Invalid ID'
+    //     })
+    // }
     res.status(200).json({
         status: 'success',
         data: {
@@ -88,14 +100,14 @@ exports.createTour = (req, res) => {
 }
 
 exports.updateTour = (req, res) => {
-    const id = Number(req.params.id)
-    if (id > tours.length) {
-        //console.log(Number(req.params.id))
-        return res.status(404).json({
-            status: 'fail',
-            message: 'Invalid ID'
-        })
-    }
+    // const id = Number(req.params.id)
+    // if (id > tours.length) {
+    //     //console.log(Number(req.params.id))
+    //     return res.status(404).json({
+    //         status: 'fail',
+    //         message: 'Invalid ID'
+    //     })
+    // }
     res.status(200).json({
         status: 'success',
         data: {
@@ -105,14 +117,15 @@ exports.updateTour = (req, res) => {
 }
 
 exports.deleteTour = (req, res) => {
-    const id = Number(req.params.id)
-    if (id > tours.length) {
-        //console.log(Number(req.params.id))
-        return res.status(404).json({
-            status: 'fail',
-            message: 'Invalid ID'
-        })
-    }
+    //now handled by Param Middleware above
+    // const id = Number(req.params.id)
+    // if (id > tours.length) {
+    //     //console.log(Number(req.params.id))
+    //     return res.status(404).json({
+    //         status: 'fail',
+    //         message: 'Invalid ID'
+    //     })
+    // }
     res.status(204).json({
         status: 'success',
         data: null

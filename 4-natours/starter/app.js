@@ -55,7 +55,7 @@ app.use((req, res, next) => {
 
 
 //set up the express middleware routers
-//creates a small sub-app to mount the router to the route
+//creates a small sub-app to Mount the Router to the route
 //can't mount the routers before they are declared (e.g. const userRouter = express.Router())
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
