@@ -20,7 +20,7 @@ router
     // .route('/api/v1/tours')
     .route('/')  //using the express Router set in Middleware
     .get(tourController.getAllTours)
-    .post(tourController.createTour)
+    .post(tourController.checkBody, tourController.createTour)
 
 // app
 router
