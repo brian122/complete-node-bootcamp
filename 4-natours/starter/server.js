@@ -1,7 +1,9 @@
 const dotenv = require('dotenv')
+
 dotenv.config({ path: './config.env' })
 //the environment varialbe needs to be before the app file
 const app = require('./app')
+
 
 
 //Environment Variables
