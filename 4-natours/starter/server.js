@@ -1,10 +1,14 @@
-//mongoose is mongodb driver
+//mongoose is mongodb driver and ODM library
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 
 dotenv.config({ path: './config.env' })
 //the environment varialbe needs to be before the app file
 const app = require('./app')
+
+//Environment Variables
+console.log(app.get('env')) //set by express
+// console.log(process.env) //process is a core module
 
 //create a variable to hold our mongoDB connection string
 const DB = process.env.DATABASE.replace(
@@ -18,10 +22,42 @@ mongoose.connect(DB).then((con) => {
   console.log('DB connection successfull!');
 });
 
-//Environment Variables
-console.log(app.get('env')) //set by express
-// console.log(process.env) //process is a core module
+//create a tour schema
+const tourSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'A tour must have a name'],
+    unique: true
+  },
+  rating: {
+    type: Number,
+    default: 4.5
+  },
+  price: {
+    type: Number,
+    required: [true, 'A tour must have a price']
+  }
+})
+//create a model. Convention is alway use upper case on model names and variables 
+const Tour = mongoose.model('Tour', tourSchema)
 
+//create a new document (row) out of the Tour model
+// const testTour = new Tour({
+//   name: 'The Forest Hiker',
+//   rating: 4.7,
+//   price: 497
+// })
+
+const testTour = new Tour({
+  name: 'The Park Camper',
+  price: 933
+})
+
+testTour.save().then(doc => {
+  console.log(doc)
+}).catch(err => {
+  console.log('*** TOUR SAVE ERROR! ***', err)
+})
 
 /////////////////////////////////////////////
 /// Web Server
