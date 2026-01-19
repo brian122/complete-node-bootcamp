@@ -1,6 +1,6 @@
 // const fs = require('fs')
 
-const Tour = require('./../models/tourModel')
+const Tour = require('../models/tourModel')
 
 /////////////////////////////////////////////
 /// Route Handler Functions
@@ -38,15 +38,15 @@ const Tour = require('./../models/tourModel')
 //Check if body contains the name and price property
 //If not, send back 400 (bad request)
 //Add it to the post handler stack
-exports.checkBody = (req, res, next) => {
-    if(!req.body.name || !req.body.price) {
-        return res.status(400).json({
-            status: 'fail',
-            message: 'Missing name or price'
-        })
-    }
-    next()
-}
+// exports.checkBody = (req, res, next) => {
+//     if(!req.body.name || !req.body.price) {
+//         return res.status(400).json({
+//             status: 'fail',
+//             message: 'Missing name or price'
+//         })
+//     }
+//     next()
+// }
 
 exports.getAllTours = (req, res) => {
     console.log(req.requestTime)
@@ -87,13 +87,24 @@ exports.getTour = (req, res) => {
     // })
 }
 
-exports.createTour = (req, res) => {
-            res.status(201).json({
+exports.createTour = async (req, res) => {
+    try {
+        //calls the create method on the Model
+        const newTour = await Tour.create(req.body)
+                
+        res.status(201).json({
             status: 'success',
-            // data: {
-            //     tour: newTour
-            // }
+            data: {
+                tour: newTour
+            }
         })
+    } catch (err) {
+        res.status(400).json({
+            status: 'fail',
+            message: err
+        })
+    }
+}
     //console.log(req.body)
     //the DB normally creates a new ID
     //we will just +1 the last object in the json file
@@ -117,7 +128,7 @@ exports.createTour = (req, res) => {
     // })
     //since we are res with status we don't need this send
     //res.send('Done')
-}
+// }
 
 exports.updateTour = (req, res) => {
     // const id = Number(req.params.id)
