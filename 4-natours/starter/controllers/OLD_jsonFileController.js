@@ -1,6 +1,11 @@
-// const fs = require('fs')
+/////////////////////////////////////////////
+/// I created a copy of the old tourController from before refactoring exercise 88
+/// This uses the json file as the DB instead of MongoDB
+/////////////////////////////////////////////
 
-const Tour = require('./../models/tourModel')
+const fs = require('fs')
+
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`))
 
 /////////////////////////////////////////////
 /// Route Handler Functions
@@ -22,17 +27,17 @@ const Tour = require('./../models/tourModel')
 //in ES6 if the key and value have the same name you don't have to specify them. Can just write tours.
 //Lesson:67 separating the HTTP Method and URL from the Route Handler funtions
 
-//Param Middleware. Checks ID uses json file DB.
-// exports.checkID = (req, res, next, val) => {
-//     console.log(`Tour id is: ${val}`)
-//     if (req.param.id * 1 > tours.length) {
-//         return res.status(404).json({
-//             status: 'fail',
-//             message: 'Invalid ID'
-//         })
-//     }
-//     next()
-// }
+//Param Middleware
+exports.checkID = (req, res, next, val) => {
+    console.log(`Tour id is: ${val}`)
+    if (req.param.id * 1 > tours.length) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Invalid ID'
+        })
+    }
+    next()
+}
 
 //Create a checkBody middleware
 //Check if body contains the name and price property
@@ -53,11 +58,11 @@ exports.getAllTours = (req, res) => {
     res.status(200).json({
         status: 'success',
         requestedAt: req.requestTime,
-        // results: tours.length,
-        // data: {
-        //     //tours: tours
-        //     tours
-        // }
+        results: tours.length,
+        data: {
+            //tours: tours
+            tours
+        }
     })
 }
 
@@ -70,7 +75,7 @@ exports.getTour = (req, res) => {
     const id = Number(req.params.id)
     //const id = req.params.id *1  // can implicitly change variable type
 
-    // const tour = tours.find(el => el.id === id)
+    const tour = tours.find(el => el.id === id)
 
     // if (id > tours.length) {
     // if (!tour) {
@@ -79,42 +84,36 @@ exports.getTour = (req, res) => {
     //         message: 'Invalid ID'
     //     })
     // }
-    // res.status(200).json({
-    //     status: 'success',
-    //     data: {
-    //         tour
-    //     }
-    // })
+    res.status(200).json({
+        status: 'success',
+        data: {
+            tour
+        }
+    })
 }
 
 exports.createTour = (req, res) => {
-            res.status(201).json({
-            status: 'success',
-            // data: {
-            //     tour: newTour
-            // }
-        })
     //console.log(req.body)
     //the DB normally creates a new ID
     //we will just +1 the last object in the json file
-    // const newId = tours[tours.length -1].id + 1
-    // //Object.assign creates a new object by merging two objects
-    // //could have req.body.id = newID but didn't want to mutate the original
-    // const newTour = Object.assign({ id: newId }, req.body)
-    // //push the new tour into the tours array
-    // tours.push(newTour)
-    // //persist the change to the file
-    // //We use the writeFile not the writeFileSync so we don't block the event loop
-    // //we have to stringify the tours object
-    // fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), err => {
-    //     //status of 201 = created
-    //     res.status(201).json({
-    //         status: 'success',
-    //         data: {
-    //             tour: newTour
-    //         }
-    //     })
-    // })
+    const newId = tours[tours.length -1].id + 1
+    //Object.assign creates a new object by merging two objects
+    //could have req.body.id = newID but didn't want to mutate the original
+    const newTour = Object.assign({ id: newId }, req.body)
+    //push the new tour into the tours array
+    tours.push(newTour)
+    //persist the change to the file
+    //We use the writeFile not the writeFileSync so we don't block the event loop
+    //we have to stringify the tours object
+    fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), err => {
+        //status of 201 = created
+        res.status(201).json({
+            status: 'success',
+            data: {
+                tour: newTour
+            }
+        })
+    })
     //since we are res with status we don't need this send
     //res.send('Done')
 }

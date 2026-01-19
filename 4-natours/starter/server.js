@@ -22,24 +22,24 @@ mongoose.connect(DB).then((con) => {
   console.log('DB connection successfull!');
 });
 
-//create a tour schema
-const tourSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'A tour must have a name'],
-    unique: true
-  },
-  rating: {
-    type: Number,
-    default: 4.5
-  },
-  price: {
-    type: Number,
-    required: [true, 'A tour must have a price']
-  }
-})
-//create a model. Convention is alway use upper case on model names and variables 
-const Tour = mongoose.model('Tour', tourSchema)
+// //create a tour schema
+// const tourSchema = new mongoose.Schema({
+//   name: {
+//     type: String,
+//     required: [true, 'A tour must have a name'],
+//     unique: true
+//   },
+//   rating: {
+//     type: Number,
+//     default: 4.5
+//   },
+//   price: {
+//     type: Number,
+//     required: [true, 'A tour must have a price']
+//   }
+// })
+// //create a model. Convention is alway use upper case on model names and variables 
+// const Tour = mongoose.model('Tour', tourSchema)
 
 //create a new document (row) out of the Tour model
 // const testTour = new Tour({
@@ -48,16 +48,17 @@ const Tour = mongoose.model('Tour', tourSchema)
 //   price: 497
 // })
 
-const testTour = new Tour({
-  name: 'The Park Camper',
-  price: 933
-})
+//test adding a document to the MongoDB
+// const testTour = new Tour({
+//   name: 'The Park Camper',
+//   price: 933
+// })
 
-testTour.save().then(doc => {
-  console.log(doc)
-}).catch(err => {
-  console.log('*** TOUR SAVE ERROR! ***', err)
-})
+// testTour.save().then(doc => {
+//   console.log(doc)
+// }).catch(err => {
+//   console.log('*** TOUR SAVE ERROR! ***', err)
+// })
 
 /////////////////////////////////////////////
 /// Web Server
