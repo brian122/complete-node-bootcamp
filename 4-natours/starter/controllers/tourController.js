@@ -1,5 +1,8 @@
 // const fs = require('fs')
 
+//mongoose query documentation
+//https://www.mongodb.com/docs/php-library/current/crud/query/
+
 const Tour = require('../models/tourModel')
 
 /////////////////////////////////////////////
@@ -58,7 +61,8 @@ exports.getAllTours = async (req, res) => {
 			// requestedAt: req.requestTime,
 			results: tours.length,
 			data: {
-				//tours: tours
+				//tours: tours --> tour property is set to the tour object
+				//with es6 no longer have to do this when property has the same name as the object
 				tours,
 			},
 		})
@@ -75,6 +79,7 @@ exports.getAllTours = async (req, res) => {
 
 exports.getTour = async (req, res) => {
 	try {
+		//Tour.findOne({ _id: req.params.id }) does the same as below
 		const tour = await Tour.findById(req.params.id)
 
 		res.status(200).json({
@@ -154,7 +159,25 @@ exports.createTour = async (req, res) => {
 //res.send('Done')
 // }
 
-exports.updateTour = (req, res) => {
+exports.updateTour = async (req, res) => {
+	try {
+		const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+			new: true,
+			runValidators: true,
+		})
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				tour,
+			},
+		})
+	} catch (err) {
+		res.status(400).json({
+			status: 'fail',
+			message: err,
+		})
+	}
 	// const id = Number(req.params.id)
 	// if (id > tours.length) {
 	//     //console.log(Number(req.params.id))
@@ -163,12 +186,6 @@ exports.updateTour = (req, res) => {
 	//         message: 'Invalid ID'
 	//     })
 	// }
-	res.status(200).json({
-		status: 'success',
-		data: {
-			tour: '<Updated tour here...>',
-		},
-	})
 }
 
 exports.deleteTour = (req, res) => {
